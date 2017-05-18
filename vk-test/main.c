@@ -66,7 +66,7 @@ int bsearch1(int* arr, int x, int sz) //return -1 if all elements are less or eq
          }
          else
          {
-             printf("Answer1 to query %d: Element not found\n", i, ans1);
+             printf("Answer1 to query %d: Element not found\n", i);
          }
          if(bsearch2(arr, i, SZ, &ans2))
          {
@@ -74,7 +74,7 @@ int bsearch1(int* arr, int x, int sz) //return -1 if all elements are less or eq
          }
          else
          {
-             printf("Answer2 to query %d: Element not found\n", i, ans1);
+             printf("Answer2 to query %d: Element not found\n", i);
          }
      }
      printf("\n");
