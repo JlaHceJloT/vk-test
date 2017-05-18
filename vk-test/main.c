@@ -25,7 +25,7 @@ int bsearch1(int* arr, int x, int sz) //return -1 if all elements are less or eq
     while(r - l > 1)
     {
         int mid = (r+l)/2;
-        if(arr[mid] >= x)
+        if(arr[mid] > x)
             r = mid;
         else
             l = mid;
@@ -42,7 +42,7 @@ int bsearch1(int* arr, int x, int sz) //return -1 if all elements are less or eq
      while(r - l > 1)
      {
          int mid = (r+l)/2;
-         if(arr[mid] >= x)
+         if(arr[mid] > x)
              r = mid;
          else
              l = mid;
@@ -54,33 +54,44 @@ int bsearch1(int* arr, int x, int sz) //return -1 if all elements are less or eq
          return true;
  }
 
+ void test(int *arr)
+ {
+     for(int i = -1; i<= SZ; ++i)
+     {
+         int ans1, ans2;
+         ans1 = bsearch1(arr,i,SZ);
+         if(ans1 != -1)
+         {
+             printf("Answer1 to query %d: %d\n", i, ans1);
+         }
+         else
+         {
+             printf("Answer1 to query %d: Element not found\n", i, ans1);
+         }
+         if(bsearch2(arr, i, SZ, &ans2))
+         {
+             printf("Answer2 to query %d: %d\n", i, ans2);
+         }
+         else
+         {
+             printf("Answer2 to query %d: Element not found\n", i, ans1);
+         }
+     }
+     printf("\n");
+ }
+
 
 int main()
 {
+    int arr1[SZ] = {0,1,2,3,4,5,6,7,8,9};
+    int arr2[SZ] = {0,1,2,3,3,3,3,7,8,9};
+    int arr3[SZ] = {0,0,0,3,3,3,3,7,8,9};
+    int arr4[SZ] = {0,0,0,3,3,3,3,7,7,7};
+    test(arr1);
+    test(arr2);
+    test(arr3);
+    test(arr4);
 
-    int arr[SZ] = {0,1,2,3,4,5,6,7,8,9};
-
-    for(int i = -1; i<= SZ; ++i)
-    {
-        int ans1, ans2;
-        ans1 = bsearch1(arr,i,SZ);
-        if(ans1 != -1)
-        {
-            printf("Answer1 to query %d: %d\n", i, ans1);
-        }
-        else
-        {
-            printf("Answer1 to query %d: Element not found\n", i, ans1);
-        }
-        if(bsearch2(arr, i, SZ, &ans2))
-        {
-            printf("Answer2 to query %d: %d\n", i, ans2);
-        }
-        else
-        {
-            printf("Answer2 to query %d: Element not found\n", i, ans1);
-        }
-    }
 
     return 0;
 }
