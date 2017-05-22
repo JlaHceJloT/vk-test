@@ -20,118 +20,51 @@
 
  */
 
-#include "stdlib.h"
-#include "stdio.h"
-#include "math.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 
+#include "list.h"
+#include "hashtable.h"
 
-//#define BASE 97 //base for hash
-const int ALPH_SZ = 96;
-const int BASE = 97;
-int MOD;        //specify after realize number of strings
+#define EXIT "exit\n"
 
-typedef enum { false, true } bool;
 
-int gcd(int a, int b)
+void ProcessInputStrings(const HashTable* hashTable)
 {
-    return b?gcd(b, a%b):a;
-}
-
-bool CheckCoprime(int a, int b)
-{
-    if(gcd(a,b) == 1)
-        return true;
-    else
-        return false;
-}
-
-typedef struct _Node
-{
-    struct _Node* next;
-    char* data;
-} Node;
-
-void FreeList(Node* head, bool bFreeData)
-{
-    while(head != NULL)
+    char * curStr;
+    while(1)
     {
-        Node* tmp = head->next;
-        if(bFreeData == true)
-            free(head->data);
-        free(head);
-        head = tmp;
+        size_t len = 0;
+        getline(&curStr, &len, stdin);
+        if(strcmp(curStr, EXIT) == 0)
+            return;
+        bool ans = CheckStringInHashTable(hashTable, curStr);
+        if(ans == true)
+            puts("YES");
+        else
+            puts("NO");
     }
-}
-
-long long getHash(char* p, int sz)
-{
-
-}
-
-int ReadDictionary(Node* Head, FILE* fp) //return number of read words in list
-{
-    size_t read;
-    size_t len = 0;
-    Node* cur = Head;
-    cur->data = NULL;
-    Node* prev;
-    int cnt = 0;
-    while((read = getline(&cur->data, &len, fp)) != -1)
-    {
-        cnt++;
-        cur->next = (Node*)malloc(sizeof(Node));
-        prev = cur;
-        cur = cur->next;
-        cur->data = NULL;
-    }
-    free(cur);
-    prev->next = NULL;
-    return cnt;
+    free(curStr);
 }
 
 int main(int argc, char* argv[])
 {
-    /*
 
+    Node* DictionaryHead = NULL;
+    int DictionarySz;
+    if(argc > 1)
+        DictionarySz = CreateDictionary(argv[1], &DictionaryHead);
+    else
+        DictionarySz = CreateDictionary("dictionary", &DictionaryHead);
 
-    char * p = NULL;
-    size_t len = 0;
-    size_t sz = getline(&p, &len, stdin);
+    HashTable hashTable;
+    CreateHashTable(DictionaryHead, DictionarySz, &hashTable);
 
-    free(p);
-    return 0;
-    */
+    ProcessInputStrings(&hashTable);
 
-    FILE* fp;
-    fp = fopen("dictionary","r");
-    if(fp == NULL)
-    {
-        printf("Can't open file %s", argv[1]);
-        exit(EXIT_FAILURE);
-    }
-    Node DictionaryHead;
-    int DictionarySz = ReadDictionary(&DictionaryHead, fp);
-    MOD = DictionarySz/0.75;    //load factor is about 0.75
-    if(CheckCoprime(MOD, BASE) == false)        //BASE is prime, so ++ is ok, getting coprime
-    {
-        MOD++;
-    }
-    Node **HashTable;
-    HashTable = (Node*)malloc(MOD*sizeof(Node*));
-
-
-
-
-    Node* cur = &DictionaryHead;
-    while(cur!= NULL)
-    {
-        printf("%s", cur->data);
-        cur = cur->next;
-    }
-    printf("%d\n", DictionarySz);
-
-    free(HashTable);
+    FreeHashTable(&hashTable);
     FreeList(DictionaryHead, true);
 
 
